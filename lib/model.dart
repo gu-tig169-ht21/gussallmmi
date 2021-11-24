@@ -1,26 +1,37 @@
 import 'package:flutter/material.dart';
-import 'package:my_first_app/main.dart';
 
 class TodoListItem {
   String assignment;
+  bool isDone = false;
 
   TodoListItem({required this.assignment});
 }
 
 class MyState extends ChangeNotifier {
-  bool? _myBool = false;
-  bool? get myBool => _myBool;
+  List<TodoListItem> _todoList = [];
 
-  List<TodoListItem> listGetter = [];
-  List<TodoListItem> get todoList => listGetter;
+  List<TodoListItem> get todoList => _todoList;
+
+  int _filterBy = 0;
+  int get filterBy => _filterBy;
 
   void addItem(TodoListItem listItem) {
-    listGetter.add(listItem);
+    todoList.add(listItem);
     notifyListeners();
   }
 
   void removeItem(TodoListItem listItem) {
-    listGetter.remove(listItem);
+    todoList.remove(listItem);
+    notifyListeners();
+  }
+
+  void setMyBool(TodoListItem listItem, bool isDone) {
+    listItem.isDone = isDone;
+    notifyListeners();
+  }
+
+  void setFilterBy(int filterBy) {
+    this._filterBy = filterBy;
     notifyListeners();
   }
 }
