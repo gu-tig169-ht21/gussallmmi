@@ -1,10 +1,29 @@
+import 'dart:js';
+
 import 'package:flutter/material.dart';
+import './Api.dart';
 
 class TodoListItem {
+  String id;
   String assignment;
-  bool isDone = false;
+  bool isDone;
 
-  TodoListItem({required this.assignment});
+  TodoListItem({this.id = "", required this.assignment, this.isDone = false});
+
+  static Map<String, dynamic> toJson(TodoListItem listItem) {
+    return {
+      "title": listItem.assignment,
+      "done": listItem.isDone,
+    };
+  }
+
+  factory TodoListItem.fromJson(Map<String, dynamic> json) {
+    return TodoListItem(
+      id: json['id'],
+      assignment: json['title'],
+      isDone: json['done'],
+    );
+  }
 }
 
 class MyState extends ChangeNotifier {
@@ -15,13 +34,19 @@ class MyState extends ChangeNotifier {
   int _filterBy = 0;
   int get filterBy => _filterBy;
 
-  void addItem(TodoListItem listItem) {
-    todoList.add(listItem);
+  Future getList() async {
+    List<TodoListItem> todoList = (await Api.fetchData());
+    _todoList = todoList;
     notifyListeners();
   }
 
-  void removeItem(TodoListItem listItem) {
-    todoList.remove(listItem);
+  void addItem(TodoListItem listItem) async {
+    _todoList = (await Api.addItems(listItem, context));
+    notifyListeners();
+  }
+
+  void removeItem(TodoListItem listItem) async {
+    _todoList = await Api.removeItems(listItem.id);
     notifyListeners();
   }
 
