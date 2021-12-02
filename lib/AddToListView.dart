@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'model.dart';
+import 'package:http/http.dart' as http;
 
 class AddToListView extends StatefulWidget {
   final TodoListItem listItem;
@@ -50,6 +51,7 @@ class _AddToListViewState extends State<AddToListView> {
                 ),
                 IconButton(
                     onPressed: () {
+                      _doStuff();
                       Navigator.pop(
                           context, TodoListItem(assignment: assignment));
                     },
@@ -62,5 +64,16 @@ class _AddToListViewState extends State<AddToListView> {
             )
           ],
         ));
+  }
+
+  void _doStuff() async {
+    var result = await _fetchStuffFromInternet();
+    print(result);
+  }
+
+  Future<String> _fetchStuffFromInternet() async {
+    http.Response response = await http
+        .get(Uri.parse("https://todoapp-api-pyq5q.ondigitalocean.app/"));
+    return response.body;
   }
 }
