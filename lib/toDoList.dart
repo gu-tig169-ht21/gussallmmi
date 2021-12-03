@@ -5,13 +5,9 @@ import 'package:provider/provider.dart';
 import 'model.dart';
 
 class TodoList extends StatelessWidget {
-  //final TodoListItem listItem;
-
   final List<TodoListItem> todolist;
 
   TodoList(this.todolist);
-
-  //TodoList({Key? key, required this.listItem}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -47,7 +43,7 @@ class TodoList extends StatelessWidget {
         onChanged: (bool? newCheckboxValue) {
           if (newCheckboxValue != null) {
             var state = Provider.of<MyState>(context, listen: false);
-            state.setMyBool(listItem, newCheckboxValue);
+            state.updateItem(listItem);
           }
         });
   }
