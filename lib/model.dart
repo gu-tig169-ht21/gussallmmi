@@ -1,5 +1,3 @@
-import 'dart:js';
-
 import 'package:flutter/material.dart';
 import './Api.dart';
 
@@ -24,6 +22,10 @@ class TodoListItem {
       isDone: json['done'],
     );
   }
+
+  void toggle(TodoListItem listItem) {
+    listItem.isDone = !isDone;
+  }
 }
 
 class MyState extends ChangeNotifier {
@@ -35,18 +37,24 @@ class MyState extends ChangeNotifier {
   int get filterBy => _filterBy;
 
   Future getList() async {
-    List<TodoListItem> todoList = (await Api.fetchData());
+    List<TodoListItem> todoList = await Api.fetchData();
     _todoList = todoList;
     notifyListeners();
   }
 
   void addItem(TodoListItem listItem) async {
-    _todoList = (await Api.addItems(listItem, context));
+    _todoList = await Api.addItems(listItem);
+    notifyListeners();
+  }
+
+  void updateItem(TodoListItem listItem) async {
+    listItem.toggle(listItem);
+    _todoList = await Api.updateItem(listItem);
     notifyListeners();
   }
 
   void removeItem(TodoListItem listItem) async {
-    _todoList = await Api.removeItems(listItem.id);
+    _todoList = await Api.deleteItem(listItem.id);
     notifyListeners();
   }
 

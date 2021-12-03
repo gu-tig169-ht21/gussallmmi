@@ -1,7 +1,6 @@
 // ignore_for_file: file_names, prefer_const_constructors
 
 import 'package:flutter/material.dart';
-import 'package:my_first_app/main.dart';
 import 'package:provider/provider.dart';
 import './AddToListView.dart';
 import 'ToDoList.dart';
